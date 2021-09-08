@@ -1,22 +1,34 @@
-const images = [
-  {
-    url: 'https://images.pexels.com/photos/140134/pexels-photo-140134.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    alt: 'White and Black Long Fur Cat',
-  },
-  {
-    url: 'https://images.pexels.com/photos/213399/pexels-photo-213399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    alt: 'Orange and White Koi Fish Near Yellow Koi Fish',
-  },
-  {
-    url: 'https://images.pexels.com/photos/219943/pexels-photo-219943.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    alt: 'Group of Horses Running',
-  },
-];
-
-const galleryEl = document.querySelector('#gallery');
-
-const makeMarkupString = ({ url, alt }) => {
-  return `<li class="item"><img class="image" src=${url}, alt=${alt}, width=320></li>`;
+const randomIntegerFromInterval = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-galleryEl.insertAdjacentHTML('afterbegin', images.map(makeMarkupString).join(''));
+const makeTransaction = transaction => {
+  return new Promise((resolve, reject) => {
+    const delay = randomIntegerFromInterval(200, 500);
+
+    setTimeout(() => {
+      const canProcess = Math.random() > 0.3;
+
+      if (canProcess) {
+        resolve({ id: transaction.id, time: delay });
+      }
+      reject(transaction.id);
+    }, delay);
+  });
+};
+
+const logSuccess = ({ id, time }) => {
+  console.log(`Transaction ${id} processed in ${time}ms`);
+};
+
+const logError = id => {
+  console.warn(`Error processing transaction ${id}. Please try again later.`);
+};
+
+makeTransaction({ id: 70, amount: 150 }).then(logSuccess).catch(logError);
+
+makeTransaction({ id: 71, amount: 230 }).then(logSuccess).catch(logError);
+
+makeTransaction({ id: 72, amount: 75 }).then(logSuccess).catch(logError);
+
+makeTransaction({ id: 73, amount: 100 }).then(logSuccess).catch(logError);
